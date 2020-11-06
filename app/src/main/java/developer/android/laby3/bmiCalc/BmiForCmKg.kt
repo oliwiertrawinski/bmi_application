@@ -6,7 +6,10 @@ class BmiForCmKg(
     private val mass: Double,
     private val height: Double
 ) : Bmi {
-    override fun count(): Double =
-        mass / (height * height / 10000)
+    override fun count(): Double {
+        require(mass>0)
+        require(height>0)
+        return mass / (height * height / 10000)
+    }
 
 }

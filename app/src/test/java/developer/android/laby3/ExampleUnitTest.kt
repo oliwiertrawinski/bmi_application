@@ -1,5 +1,6 @@
 package developer.android.laby3
 
+import developer.android.laby3.bmiCalc.BmiForCmKg
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -11,8 +12,11 @@ import org.junit.Assert.*
  */
 class  ExampleUnitTest {
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun czyToZadanieJestZrobione() {
+
+        val czyWykonane = false
+        assertEquals(true, czyWykonane)
+        // niestety nie wykonałem tego zadania, trochę z powodu, że nie wiedziałem co napisać trochę z powodu, że jednak nie powinienem zostawiać niektórych rzeczy na piątek wieczór.
+        // W kazdym razie życzę miłego dnia, nawet pomimo przeglądania tej aplikacji!
     }
 }
-// podczas wrzucania dependencies wyskakiwał mi błąd i nie udało mi się ogarnąć gradle na tyle, żeby móc zacząć robić kotesty, także tej części listy niestety nie mam
