@@ -54,14 +54,13 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.1.0'
     implementation 'com.google.code.gson:gson:2.8.6'
-    //testImplementation 'junit:junit:4.12' // Próbowałem to zakomentować w momencie kiedy dodawałem 3 linie poniżej
+    testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-//      NIE DZIAŁA
-//    testImplementation 'io.kotest:kotest-runner-junit5:<version>' // for kotest framework
-//    testImplementation 'io.kotest:kotest-assertions-core:<version>' // for kotest core jvm assertions
-//    testImplementation 'io.kotest:kotest-property:<version>' // for kotest property test
+
+    testImplementation("io.kotest:kotest-assertions-core-jvm:4.1.3")
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:4.1.3")
 
 }
 
