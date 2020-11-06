@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="developer.android.laby3.MainActivity">
+    <item
+        android:id="@+id/action_change_unit"
+        android:orderInCategory="100"
+        android:title="@string/changeunit" />
+    <item
+        android:id="@+id/action_history"
+        android:orderInCategory="101"
+        android:title="History"
+        app:showAsAction="never" />
+</menu>
