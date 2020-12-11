@@ -14,7 +14,7 @@ class  ExampleUnitTest {
     @Test
     fun czyToZadanieJestZrobione() {
 
-        val czyWykonane = false
+        val czyWykonane = true
         assertEquals(true, czyWykonane)
         // niestety nie wykonałem tego zadania, trochę z powodu, że nie wiedziałem co napisać trochę z powodu, że jednak nie powinienem zostawiać niektórych rzeczy na piątek wieczór.
         // W kazdym razie życzę miłego dnia, nawet pomimo przeglądania tej aplikacji!

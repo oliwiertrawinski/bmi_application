@@ -22,6 +22,7 @@ class HistoryActivity : AppCompatActivity() {
         rvHistory.adapter = adapter
         rvHistory.layoutManager = LinearLayoutManager(this)
     }
+    //kjafhagdfjk
 }
 
 
