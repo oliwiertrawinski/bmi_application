@@ -1,14 +1,18 @@
 package developer.android.laby3
 
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import developer.android.laby3.DataBase.DataBaseHelper
+import developer.android.laby3.DataBase.TableInfo
 import developer.android.laby3.bmiCalc.BmiForCmKg
 import developer.android.laby3.bmiCalc.BmiForInLbs
 import developer.android.laby3.databinding.ActivityMainBinding
+
 
 
 import kotlinx.android.synthetic.main.activity_main.*
@@ -22,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
 
+
     var currentBmi:Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,9 +35,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //Toast.makeText(applicationContext, "Trkst do wyswietlenia", Toast.LENGTH_SHORT).show()
-        DataManager.loadData(applicationContext)
 
-//
+        val dbHelper = DataBaseHelper(applicationContext)
+        val db = dbHelper.writableDatabase
+
 
         buttonCountBmi.setOnClickListener{
             var isCorrect = true
@@ -68,11 +74,24 @@ class MainActivity : AppCompatActivity() {
                 currentBmi = String.format("%.2f", currentBmi).toDouble()
                 textLabelResult.text = currentBmi.toString()
                 setColor(currentBmi)
-                var historyLog = historyRecord(currentBmi, mass, height, getCurrentDate(), currentUnit)
-                DataManager.addLogToHistory(historyLog)//musze zalogowac do data managera
+                var historyRecord = HistoryRecord(
+                    currentBmi,
+                    mass,
+                    height,
+                    getCurrentDate(),
+                    currentUnit
+                )
 
+
+                val value = ContentValues()
+                value.put("mass", mass)
+                value.put("height", height)
+                value.put("unit", currentUnit)
+                value.put("bmi", currentBmi)
+                value.put("date", getCurrentDate())
+
+                db.insertOrThrow(TableInfo.TABLE_NAME, null, value)
             }
-            DataManager.saveData(applicationContext)
         }
 
         textLabelResult.setOnClickListener{
@@ -105,15 +124,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_history -> {
                 val intent = Intent(this, HistoryActivity::class.java)

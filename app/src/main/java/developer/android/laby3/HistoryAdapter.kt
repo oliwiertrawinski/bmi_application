@@ -1,52 +1,101 @@
+import android.content.Context
+import android.database.sqlite.SQLiteDatabase
+import android.provider.BaseColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import developer.android.laby3.BMI_IN_LBS
+import developer.android.laby3.DataBase.TableInfo
 import developer.android.laby3.R
-import developer.android.laby3.historyRecord
+import developer.android.laby3.HistoryRecord
+import kotlinx.android.synthetic.main.recycler_view_item.view.*
 
-class HistoryAdapter (private val history: ArrayList<historyRecord>) : RecyclerView.Adapter<HistoryAdapter.ViewHolder>()
-{
-    // Provide a direct reference to each of the views within a data item
-    // Used to cache the views within the item layout for fast access
-    inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
-        // Your holder should contain and initialize a member variable
-        // for any view that will be set as you render a row
-        //val nameTextView = itemView.findViewById<TextView>(R.id.contact_name)
-        val historyLine1 = itemView.findViewById<TextView>(R.id.line1)
-        val historyLine2 = itemView.findViewById<TextView>(R.id.line2)
-        val historyLine3 = itemView.findViewById<TextView>(R.id.line3)
 
+class HistoryAdapter(val context: Context, val db: SQLiteDatabase): RecyclerView.Adapter<MyViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val recyclerView_item = layoutInflater.inflate(R.layout.recycler_view_item, parent, false)
+        return MyViewHolder(recyclerView_item)
     }
 
-    // ... constructor and member variables
-    // Usually involves inflating a layout from XML and returning the holder
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryAdapter.ViewHolder {
-        val context = parent.context
-        val inflater = LayoutInflater.from(context)
-        // Inflate the custom layout
-        val contactView = inflater.inflate(R.layout.recycler_view_item, parent, false)
-        // Return a new holder instance
-        return ViewHolder(contactView)
-    }
-
-    // Involves populating data into the item through holder
-    override fun onBindViewHolder(viewHolder: HistoryAdapter.ViewHolder, position: Int) {
-        // Get the data model based on position
-        val historyRow: historyRecord = history.get(position)
-        // Set item views based on your views and data model
-        val textView1 = viewHolder.historyLine1
-        textView1.setText((position + 1).toString() + " pomiar:")
-        val textView2 = viewHolder.historyLine2
-        textView2.setText(historyRow.getLine1())
-        val textView3 = viewHolder.historyLine3
-        textView3.setText(historyRow.getLine2())
-
-    }
-
-    // Returns the total count of items in the list
     override fun getItemCount(): Int {
-        return history.size
+
+        val cursor = db.query(TableInfo.TABLE_NAME, null, null, null, null, null, null, null)
+        val rowCount = cursor.count
+        cursor.close()
+        return rowCount
     }
+
+    override fun onBindViewHolder(viewHolder: MyViewHolder, position: Int) {
+
+        val textView1 = viewHolder.view.line1
+        val textView2 = viewHolder.view.line2
+        val textView3 = viewHolder.view.line3
+
+        val cursor = db.query(TableInfo.TABLE_NAME,null,BaseColumns._ID + "=?",arrayOf(viewHolder.adapterPosition
+            .plus(1).toString()),null,null,null)
+
+        if (cursor.moveToFirst()) {
+            if (!cursor.getString(1).isNullOrEmpty() && !cursor.getString(2).isNullOrEmpty()) {
+                val position = cursor.getString(0)
+                val mass = cursor.getString(1)
+                val height = cursor.getString(2)
+                val unit = cursor.getInt(3)
+                val bmi = cursor.getString(4)
+                val date = cursor.getString(5)
+                textView1.setText(getLine1(position))
+                textView2.setText(getLine2(bmi, date))
+                textView3.setText(getLine3(mass, height, unit))
+            }else{
+                //Toast.makeText(context, "Trkst do wyswietlenia", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+}
+
+class MyViewHolder(val view:View): RecyclerView.ViewHolder(view){
+    val historyLine1 = itemView.findViewById<TextView>(R.id.line1)
+    val historyLine2 = itemView.findViewById<TextView>(R.id.line2)
+    val historyLine3 = itemView.findViewById<TextView>(R.id.line3)
+}
+
+fun getLine1(position:String):String{
+    val builder = StringBuilder()
+    builder.append(position)
+        .append(" pozycja:")
+
+    return builder.toString()
+}
+
+fun getLine2(bmi:String, date:String):String{
+    val builder = StringBuilder()
+    builder.append("Bmi: ")
+        .append(bmi)
+        .append("; Date: ")
+        .append(date)
+
+    return builder.toString()
+}
+
+fun getLine3(mass:String, height:String, unit:Int):String{
+    var massUnit = "kg"
+    var heightUnit = "cm"
+    if(unit == BMI_IN_LBS){
+        massUnit = "lbs"
+        heightUnit = "in"
+    }
+    val builder = StringBuilder()
+    builder.append("Mass: ")
+        .append(mass)
+        .append(massUnit)
+        .append("; Height: ")
+        .append(height)
+        .append(heightUnit)
+
+    return builder.toString()
 }

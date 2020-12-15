@@ -7,3 +7,4 @@ const val MIN_KG = 20.0
 const val MAX_KG = 200.0
 const val MIN_CM = 20.0
 const val MAX_CM = 250.0
+const val SENSOR_CHANGE_VAL = 1
