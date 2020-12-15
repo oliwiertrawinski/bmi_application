@@ -10,16 +10,16 @@
       android:id="@+id/line1"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:hint="Title"/>
+      android:hint="@string/title"/>
 
   <TextView
       android:id="@+id/line2"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:hint="Line 1" />
+      android:hint="@string/line_1" />
   <TextView
       android:id="@+id/line3"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:hint="Line 1" />
+      android:hint="@string/line_1" />
 </LinearLayout>
